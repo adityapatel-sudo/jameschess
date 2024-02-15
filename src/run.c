@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 int main() {
-    minimax(1,2,3,4);
+    initialize_board();
+    print_board();
     return 0;
 }
