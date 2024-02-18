@@ -7,9 +7,17 @@ extern char board[8][8];
 char extraboard[8][8];
 
 int main() {
-    initialize_board();
-    print_board(board);
     initialize_board_custom(extraboard);
     print_board(extraboard);
+    int metaData = 0;
+    initMetaData(&metaData);
+
+
+    setBlackKingCastleUnavailable(&metaData);
+    printf("%d\n",enPassantAvailable(metaData));
+    printf("%d\n",blackKingCastleAvailable(metaData));
+    printf("%d\n",whiteKingCastleAvailable(metaData));
+
+    printf("suck my dick");
     return 0;
 }

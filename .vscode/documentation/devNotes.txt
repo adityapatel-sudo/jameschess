@@ -1,0 +1,13 @@
+The indices of the array start at 0 0 
+at the bottom left, 8 8 at the top right
+  -----------------
+8| r n b q k b n r |
+7| p p p p p p p p |
+6|                 |
+5|                 |
+4|                 |
+3|                 |
+2| P P P P P P P P |
+1| R N B Q K B N R |
+  -----------------
+   a b c d e f g h

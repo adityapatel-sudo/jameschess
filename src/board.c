@@ -2,6 +2,8 @@
 #include "board.h"
 #include "minimax.h"
 #include <stdio.h>
+#include <ctype.h>
+
 
 // Global variables (if needed)
 char board[8][8];
@@ -85,7 +87,6 @@ void print_board(char brd[8][8]) {
     printf("  -----------------\n");
     // Print the column labels (letters)
     printf("   a b c d e f g h\n");
-
 }
 
 /**
@@ -114,3 +115,139 @@ struct MoveNode* get_moves(char brd[8][8], int player_turn) {
     }
 }
 
+/**
+ * next 10 functions explained here:
+ * 
+ * will all be stored in one integer to save some space
+ * 
+ * digit 0 from right will be 0 if en passant not available, 1 if available
+ * digit 1 from right will be row of the en passant destination
+ * digit 2 from right will be col of the en passant destination
+ * digit 3 from right will be 0 if white king can castle, 1 if not
+ * digit 4 from right will be 0 if black king can castle, 1 if not
+ * more metadata can be stored in digits 5,6,7
+*/
+//returns 0 if en passant not available, 1 if available
+int enPassantAvailable(int metaData) {
+    return metaData % 2; 
+}
+int enPassantPawnRow(int metaData) {
+    return (metaData/10) % 10;
+}
+int enPassantPawnCol(int metaData) {
+    return (metaData/100) % 10;
+}
+// returns will be 0 if white king can castle, 1 if not
+int whiteKingCastleAvailable(int metaData) {
+    return (metaData/1000) % 2;
+}
+int blackKingCastleAvailable(int metaData) {
+    return ((metaData)/10000) % 2;
+}
+void setEnPassantAvailable(int *metaData) {
+    *metaData = ((*metaData/10)*10)+1;
+}
+void setEnPassantUnavailable(int *metaData) {
+    *metaData = ((*metaData/10)*10);
+}
+void setEnPassantPawnRow(int *metaData, int row) {
+    int temp = *metaData % 10;
+    *metaData = (*metaData/100)*100 + (row * 10) + temp;
+}
+void setEnPassantPawnCol(int *metaData, int col) {
+    int temp = *metaData % 100;
+    *metaData = (*metaData/1000)*1000 + (col * 100) + temp;
+}
+void setWhiteKingCastleAvailable(int *metaData) {
+    int temp = *metaData % 1000;
+    *metaData = (*metaData/10000)*10000 + 1000 + temp;
+}
+void setBlackKingCastleAvailable(int *metaData) {
+    int temp = *metaData % 10000;
+    *metaData = (*metaData/100000)*100000 + 10000 + temp;
+}
+void setWhiteKingCastleUnavailable(int *metaData) {
+    int temp = *metaData % 1000;
+    *metaData = (*metaData/10000)*10000 + temp;
+}
+void setBlackKingCastleUnavailable(int *metaData) {
+    int temp = *metaData % 10000;
+    *metaData = (*metaData/100000)*100000 + temp;
+}
+void initMetaData(int *metaData) {
+    setWhiteKingCastleAvailable(metaData);
+    setBlackKingCastleAvailable(metaData);
+    setEnPassantUnavailable(metaData);
+}
+void printMetaData(int metaData){
+    printf("%d\n",enPassantAvailable(metaData));
+    printf("%d\n",blackKingCastleAvailable(metaData));
+    printf("%d\n",whiteKingCastleAvailable(metaData));
+}
+
+/*
+PIECE MOVE FUNCTIONS
+*/
+
+MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int player_turn) {
+    MoveNode *head = NULL;
+    MoveNode **cur = &head;
+    if (player_turn == 0) { // white turn
+        head = makeMoveNode(row_from, col_from, row_from, col_from+1);
+        if (row_from == 1) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+2));
+        }
+        //check if pawn can take diagonally left
+        if (col_from > 0 && isBlackPiece(board[row_from+1][col_from-1])) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from-1));
+        }
+        //check if pawn can take diagonally right
+        if (col_from < 7 && isBlackPiece(board[row_from+1][col_from+1])) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
+        }
+    } else { // black turn
+
+    }
+    return NULL;
+}
+MoveNode* check_en_passant(int row_from, int col_from, int player_turn, int metadata);
+MoveNode* get_rook_moves(int row_from, int col_from);
+MoveNode* get_bishop_moves(int row_from, int col_from);
+MoveNode* get_knight_moves(int row_from, int col_from);
+MoveNode* get_queen_moves(int row_from, int col_from);
+MoveNode* get_king_moves(int row_from, int col_from);
+
+
+/**
+ * @brief returns new MoveNode* with null next, and argument parameters
+ */
+MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to) {
+    MoveNode* move = (MoveNode *)malloc(sizeof(MoveNode));
+    move->move.col_from = col_from;
+    move->move.col_to = col_to;
+    move->move.row_from = row_from;
+    move->move.row_to = row_to;
+    return move;
+}
+/**
+ * @brief adds MoveNode* head to end of MoveNode* add
+ */
+void addToEnd(MoveNode *head, MoveNode* add){
+    while (head->nextMove != NULL) {
+        head = head->nextMove;
+    }
+    head->nextMove = add;
+}
+
+/**
+ * @brief returns non-zero if black, zero if not black
+ */
+int isBlackPiece(char piece) {
+    return islower(piece);
+}
+/**
+ * @brief returns non-zero if white, zero if not white
+ */
+int isWhitePiece(char piece) {
+    return isupper(piece);
+}
