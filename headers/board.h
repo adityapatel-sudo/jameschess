@@ -56,3 +56,4 @@ int isWhitePiece(char piece);
 //MoveNode Manipulation
 MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to);
 void addToEnd(MoveNode *head, MoveNode* add);
+void printMoveNodes(MoveNode *head);

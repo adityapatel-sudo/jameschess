@@ -2,6 +2,7 @@
 #include "board.h"
 #include "minimax.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 
@@ -191,7 +192,6 @@ PIECE MOVE FUNCTIONS
 
 MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int player_turn) {
     MoveNode *head = NULL;
-    MoveNode **cur = &head;
     if (player_turn == 0) { // white turn
         head = makeMoveNode(row_from, col_from, row_from, col_from+1);
         if (row_from == 1) {
@@ -206,9 +206,20 @@ MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int playe
             addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
         }
     } else { // black turn
-
+        head = makeMoveNode(row_from, col_from, row_from, col_from-1);
+        if (row_from == 6) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-2));
+        }
+        //check if pawn can take diagonally left
+        if (col_from > 0 && isWhitePiece(board[row_from-1][col_from-1])) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from-1));
+        }
+        //check if pawn can take diagonally right
+        if (col_from < 7 && isWhitePiece(board[row_from-1][col_from+1])) {
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
+        }
     }
-    return NULL;
+    return head;
 }
 MoveNode* check_en_passant(int row_from, int col_from, int player_turn, int metadata);
 MoveNode* get_rook_moves(int row_from, int col_from);
@@ -237,6 +248,21 @@ void addToEnd(MoveNode *head, MoveNode* add){
         head = head->nextMove;
     }
     head->nextMove = add;
+}
+/**
+ * @brief prints the movenodes
+ */
+void printMoveNodes(MoveNode *head) {
+    while (head != NULL)
+    {
+        printf("from: row-%d col-%d  to: row-%d col-%d\n", 
+            head->move.row_from,
+            head->move.col_from,
+            head->move.row_to,
+            head->move.col_to);
+        head = head->nextMove;
+    }
+    printf("\n");
 }
 
 /**

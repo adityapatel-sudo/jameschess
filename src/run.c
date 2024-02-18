@@ -14,10 +14,7 @@ int main() {
 
 
     setBlackKingCastleUnavailable(&metaData);
-    printf("%d\n",enPassantAvailable(metaData));
-    printf("%d\n",blackKingCastleAvailable(metaData));
-    printf("%d\n",whiteKingCastleAvailable(metaData));
-
-    printf("suck my dick");
+    MoveNode *moves = get_pawn_moves(extraboard,1,0,0);
+    printMoveNodes(moves);
     return 0;
 }
