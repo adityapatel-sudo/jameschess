@@ -91,6 +91,13 @@ void print_board(char brd[8][8]) {
 }
 
 /**
+ * @brief edits board given x, y, and val
+ */
+void edit_boardxy(char brd[8][8], int x, int y, char val) {
+    brd[y][x] = val;
+}
+
+/**
  * @brief checks if a move is valid
  * 
  * @return int 0 if valid,
@@ -151,6 +158,10 @@ void setEnPassantAvailable(int *metaData) {
 void setEnPassantUnavailable(int *metaData) {
     *metaData = ((*metaData/10)*10);
 }
+void setEnPassantLocation(int *metadata, int row, int col) {
+    setEnPassantPawnRow(metadata, row);
+    setEnPassantPawnCol(metadata, col);
+}
 void setEnPassantPawnRow(int *metaData, int row) {
     int temp = *metaData % 10;
     *metaData = (*metaData/100)*100 + (row * 10) + temp;
@@ -190,10 +201,9 @@ void printMetaData(int metaData){
 PIECE MOVE FUNCTIONS
 */
 
-MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int player_turn) {
-    MoveNode *head = NULL;
-    if (player_turn == 0) { // white turn
-        head = makeMoveNode(row_from, col_from, row_from, col_from+1);
+void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn) {
+    if (player_turn == WHITE) { // white turn
+        addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+1));
         if (row_from == 1) {
             addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+2));
         }
@@ -206,7 +216,7 @@ MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int playe
             addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
         }
     } else { // black turn
-        head = makeMoveNode(row_from, col_from, row_from, col_from-1);
+        addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-1));
         if (row_from == 6) {
             addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-2));
         }
@@ -219,14 +229,32 @@ MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int playe
             addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
         }
     }
-    return head;
 }
-MoveNode* check_en_passant(int row_from, int col_from, int player_turn, int metadata);
-MoveNode* get_rook_moves(int row_from, int col_from);
-MoveNode* get_bishop_moves(int row_from, int col_from);
-MoveNode* get_knight_moves(int row_from, int col_from);
-MoveNode* get_queen_moves(int row_from, int col_from);
-MoveNode* get_king_moves(int row_from, int col_from);
+void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn, int metadata) {
+    if (enPassantAvailable(metadata) == 0) return;
+    int epRow = enPassantPawnRow(metadata);
+    int epCol = enPassantPawnCol(metadata);
+    if (player_turn == WHITE) {// white turn
+        if (epCol > 0 && board[epRow-1][epCol-1] == 'P') { // en passant to the right
+            addToEnd(head, makeMoveNode(epRow-1,epCol-1,epRow,epCol));
+        }
+        if (epCol < 7 && board[epRow-1][epCol+1] == 'P') { // en passant to the left
+            addToEnd(head, makeMoveNode(epRow-1,epCol+1,epRow,epCol));
+        }
+    } else { // black turn
+        if (epCol > 0 && board[epRow+1][epCol-1] == 'p') { // en passant to the right
+            addToEnd(head, makeMoveNode(epRow+1,epCol-1,epRow,epCol));
+        }
+        if (epCol < 7 && board[epRow+1][epCol+1] == 'p') { // en passant to the left
+            addToEnd(head, makeMoveNode(epRow+1,epCol+1,epRow,epCol));
+        }
+    }
+}
+void get_rook_moves(MoveNode* head, int row_from, int col_from);
+void get_bishop_moves(MoveNode* head, int row_from, int col_from);
+void get_knight_moves(MoveNode* head, int row_from, int col_from);
+void get_queen_moves(MoveNode* head, int row_from, int col_from);
+void get_king_moves(MoveNode* head, int row_from, int col_from);
 
 
 /**

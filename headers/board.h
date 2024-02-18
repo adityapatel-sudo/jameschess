@@ -13,10 +13,17 @@ typedef struct MoveNode
 } MoveNode;
 
 
+enum {
+    WHITE = 0,
+    BLACK = 1
+};
+
+
 // Function prototypes
 void initialize_board();
 void initialize_board_custom(char brd[8][8]);
 void print_board(char brd[8][8]);
+void edit_boardxy(char brd[8][8], int x, int y, char val);
 int is_move_valid(int row_from, int col_from, int row_to, int col_to);
 void make_move(int row_from, int col_from, int row_to, int col_to);
 MoveNode* get_moves(char brd[8][8], int player_turn);
@@ -29,6 +36,7 @@ int whiteKingCastleAvailable(int metaData);
 int blackKingCastleAvailable(int metaData);
 void setEnPassantAvailable(int *metaData);
 void setEnPassantUnavailable(int *metaData);
+void setEnPassantLocation(int *metadata, int row, int col);
 void setEnPassantPawnRow(int *metaData, int row);
 void setEnPassantPawnCol(int *metaData, int col);
 void setWhiteKingCastleAvailable(int *metaData);
@@ -41,13 +49,13 @@ void printMetaData(int metaData);
 
 //pieceMoves 
 //all of these will return a list of possible moves  
-MoveNode* get_pawn_moves(char board[8][8], int row_from, int col_from, int player_turn);
-MoveNode* check_en_passant(int row_from, int col_from, int player_turn, int metadata);
-MoveNode* get_rook_moves(int row_from, int col_from);
-MoveNode* get_bishop_moves(int row_from, int col_from);
-MoveNode* get_knight_moves(int row_from, int col_from);
-MoveNode* get_queen_moves(int row_from, int col_from);
-MoveNode* get_king_moves(int row_from, int col_from);
+void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn);
+void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn, int metadata);
+void get_rook_moves(MoveNode* head, int row_from, int col_from);
+void get_bishop_moves(MoveNode* head, int row_from, int col_from);
+void get_knight_moves(MoveNode* head, int row_from, int col_from);
+void get_queen_moves(MoveNode* head, int row_from, int col_from);
+void get_king_moves(MoveNode* head, int row_from, int col_from);
 
 //get piece data
 int isBlackPiece(char piece);
