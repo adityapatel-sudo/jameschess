@@ -303,10 +303,58 @@ void get_rook_moves(MoveNode* head, char board[8][8], int row_from, int col_from
         }
     }
 }
-void get_bishop_moves(MoveNode* head, int row_from, int col_from);
-void get_knight_moves(MoveNode* head, int row_from, int col_from);
-void get_queen_moves(MoveNode* head, int row_from, int col_from);
-void get_king_moves(MoveNode* head, int row_from, int col_from);
+void get_bishop_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
+    //check up left
+    for (int col = col_from-1, row = row_from + 1;col >=0 && row <8; col--, row++) {
+        if (board[row][col] == ' ') { // if piece is empty
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+        } else if (pieceColor(board[row][col]) == pieceColor(board[row_from][col_from])) { // if own peice break
+            break;
+        } else if (pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])){ // if opponenent piece add move then break
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+            break;
+        }
+    }
+    //check up right
+    for (int col = col_from+1, row = row_from + 1;col <8 && row <8; col++, row++) {
+        if (board[row][col] == ' ') { // if piece is empty
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+        } else if (pieceColor(board[row][col]) == pieceColor(board[row_from][col_from])) { // if own peice break
+            break;
+        } else if (pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])){ // if opponenent piece add move then break
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+            break;
+        }
+    }
+    //check down left
+    for (int col = col_from-1, row = row_from - 1;col >=0 && row >=0; col--, row--) {
+        if (board[row][col] == ' ') { // if piece is empty
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+        } else if (pieceColor(board[row][col]) == pieceColor(board[row_from][col_from])) { // if own peice break
+            break;
+        } else if (pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])){ // if opponenent piece add move then break
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+            break;
+        }
+    }
+    //check down right
+    for (int col = col_from+1, row = row_from - 1;col <8 && row >=0; col++, row--) {
+        if (board[row][col] == ' ') { // if piece is empty
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+        } else if (pieceColor(board[row][col]) == pieceColor(board[row_from][col_from])) { // if own peice break
+            break;
+        } else if (pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])){ // if opponenent piece add move then break
+            addToEnd(head, makeMoveNode(row_from, col_from, row, col));
+            break;
+        }
+    }
+}
+void get_knight_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
+void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
+    get_rook_moves(head, board, row_from, col_from);
+    get_bishop_moves(head, board, row_from, col_from);
+}
+void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
 
 
 /**
@@ -333,9 +381,10 @@ void addToEnd(MoveNode *head, MoveNode* add){
  * @brief prints the movenodes
  */
 void printMoveNodes(MoveNode *head) {
+    printf("moves:\n");
     while (head != NULL)
     {
-        printf("from: %c%d  to: %c%d\n", 
+        printf("from: %c%d to %c%d\n", 
             convert_to_letter(head->move.col_from),
             head->move.row_from+1,
             convert_to_letter(head->move.col_to),
