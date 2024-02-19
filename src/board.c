@@ -415,7 +415,7 @@ int in_bounds(int row, int col) {
 
 /**
  * @brief returns new MoveNode* with null next, and argument parameters
- */m
+ */
 MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to) {
     MoveNode* move = (MoveNode *)malloc(sizeof(MoveNode));
     move->move.col_from = col_from;
