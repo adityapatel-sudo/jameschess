@@ -210,8 +210,9 @@ PIECE MOVE FUNCTIONS
 
 void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
     if (pieceColor(board[row_from][col_from]) == WHITE) { // white turn
-        addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+1));
-        if (row_from == 1) {
+        if (board[row_from][col_from+1] == ' ')
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+1));
+        if (row_from == 1 && board[row_from][col_from+2] == ' ') {
             addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+2));
         }
         //check if pawn can take diagonally left
@@ -223,8 +224,9 @@ void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from
             addToEnd(head, makeMoveNode(row_from, col_from, row_from+1, col_from+1));
         }
     } else { // black turn
-        addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-1));
-        if (row_from == 6) {
+        if (board[row_from][col_from-1] == ' ')
+            addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-1));
+        if (row_from == 6 && board[row_from][col_from-2] == ' ') {
             addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from-2));
         }
         //check if pawn can take diagonally left
@@ -479,5 +481,10 @@ int isWhitePiece(char piece) {
 int pieceColor(char piece) {
     if (isBlackPiece(piece)) return BLACK;
     if (isWhitePiece(piece)) return WHITE;
+    return EMPTY;
+}
+int reversePieceColor(char piece) {
+    if (isBlackPiece(piece)) return WHITE;
+    if (isWhitePiece(piece)) return BLACK;
     return EMPTY;
 }

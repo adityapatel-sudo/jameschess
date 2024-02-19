@@ -64,6 +64,7 @@ int in_bounds(int row, int col);
 int isBlackPiece(char piece);
 int isWhitePiece(char piece);
 int pieceColor(char piece);
+int reversePieceColor(char piece);
 
 //MoveNode Manipulation
 MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to);
