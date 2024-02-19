@@ -15,7 +15,8 @@ typedef struct MoveNode
 
 enum {
     WHITE = 0,
-    BLACK = 1
+    BLACK = 1,
+    EMPTY = 2
 };
 
 
@@ -57,6 +58,7 @@ void get_bishop_moves(MoveNode* head, char board[8][8], int row_from, int col_fr
 void get_knight_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
 void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
 void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
+int in_bounds(int row, int col);
 
 //get piece data
 int isBlackPiece(char piece);
@@ -65,6 +67,6 @@ int pieceColor(char piece);
 
 //MoveNode Manipulation
 MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to);
-MoveNode* deleteMoveNodes(MoveNode* head);
+void deleteMoveNodes(MoveNode* head);
 void addToEnd(MoveNode *head, MoveNode* add);
 void printMoveNodes(MoveNode *head);

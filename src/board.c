@@ -349,7 +349,58 @@ void get_bishop_moves(MoveNode* head, char board[8][8], int row_from, int col_fr
         }
     }
 }
-void get_knight_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
+void get_knight_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
+    int row;
+    int col;
+    //check up then left
+    row = row_from - 1;
+    col = col_from + 2;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check up then right
+    row = row_from + 1;
+    col = col_from + 2;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check right then up
+    row = row_from + 2;
+    col = col_from + 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check right then down
+    row = row_from + 2;
+    col = col_from - 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check down then right
+    row = row_from + 1;
+    col = col_from - 2;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check down then left
+    row = row_from - 1;
+    col = col_from - 2;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check left then down
+    row = row_from - 2;
+    col = col_from - 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check left then up
+    row = row_from - 2;
+    col = col_from + 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+}
 void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
     get_rook_moves(head, board, row_from, col_from);
     get_bishop_moves(head, board, row_from, col_from);
@@ -357,11 +408,14 @@ void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_fro
 void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
     
 }
+int in_bounds(int row, int col) {
+    return (row < 8 && row >= 0 && col < 8 && col >=0);
+}
 
 
 /**
  * @brief returns new MoveNode* with null next, and argument parameters
- */
+ */m
 MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to) {
     MoveNode* move = (MoveNode *)malloc(sizeof(MoveNode));
     move->move.col_from = col_from;
@@ -371,7 +425,7 @@ MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to) {
     return move;
 }
 
-MoveNode* deleteMoveNodes(MoveNode* head) {
+void deleteMoveNodes(MoveNode* head) {
     MoveNode *cur = head;
     while (cur != NULL) {
         cur = head->nextMove;
@@ -424,5 +478,6 @@ int isWhitePiece(char piece) {
  */
 int pieceColor(char piece) {
     if (isBlackPiece(piece)) return BLACK;
-    return WHITE;
+    if (isWhitePiece(piece)) return WHITE;
+    return EMPTY;
 }

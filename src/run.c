@@ -11,11 +11,12 @@ int main() {
     int metaData = 0;
     initMetaData(&metaData);
 
-    edit_boardxy(extraboard, 4, 4, 'C');
+    edit_boardxy(extraboard, 6, 3, 'K');
     print_board(extraboard); 
 
     MoveNode *moves = makeMoveNode(-1, -1, -1, -1);
-    get_queen_moves(moves, extraboard, 4,4);
+    get_knight_moves(moves, extraboard, 3,6);
+    get_pawn_moves(moves,extraboard,1,4,WHITE);
     printMoveNodes(moves);
     return 0;
 }
