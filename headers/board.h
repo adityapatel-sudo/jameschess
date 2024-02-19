@@ -51,8 +51,8 @@ void printMetaData(int metaData);
 
 //pieceMoves 
 //all of these will return a list of possible moves  
-void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn);
-void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn, int metadata);
+void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
+void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int metadata);
 void get_rook_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
 void get_bishop_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
 void get_knight_moves(MoveNode* head, char board[8][8], int row_from, int col_from);

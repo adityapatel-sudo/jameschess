@@ -208,8 +208,8 @@ void printMetaData(int metaData){
 PIECE MOVE FUNCTIONS
 */
 
-void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn) {
-    if (player_turn == WHITE) { // white turn
+void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
+    if (pieceColor(board[row_from][col_from]) == WHITE) { // white turn
         addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+1));
         if (row_from == 1) {
             addToEnd(head, makeMoveNode(row_from, col_from, row_from, col_from+2));
@@ -237,11 +237,11 @@ void get_pawn_moves(MoveNode* head, char board[8][8], int row_from, int col_from
         }
     }
 }
-void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int player_turn, int metadata) {
+void check_en_passant(MoveNode* head, char board[8][8], int row_from, int col_from, int metadata) {
     if (enPassantAvailable(metadata) == 0) return;
     int epRow = enPassantPawnRow(metadata);
     int epCol = enPassantPawnCol(metadata);
-    if (player_turn == WHITE) {// white turn
+    if (pieceColor(board[row_from][col_from]) == WHITE) {// white turn
         if (epCol > 0 && board[epRow-1][epCol-1] == 'P') { // en passant to the right
             addToEnd(head, makeMoveNode(epRow-1,epCol-1,epRow,epCol));
         }
