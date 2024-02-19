@@ -354,7 +354,9 @@ void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_fro
     get_rook_moves(head, board, row_from, col_from);
     get_bishop_moves(head, board, row_from, col_from);
 }
-void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from);
+void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
+    
+}
 
 
 /**
@@ -368,6 +370,16 @@ MoveNode* makeMoveNode(int row_from, int col_from, int row_to, int col_to) {
     move->move.row_to = row_to;
     return move;
 }
+
+MoveNode* deleteMoveNodes(MoveNode* head) {
+    MoveNode *cur = head;
+    while (cur != NULL) {
+        cur = head->nextMove;
+        free(head);
+        head = cur;
+    }
+}
+
 /**
  * @brief adds MoveNode* head to end of MoveNode* add
  */
