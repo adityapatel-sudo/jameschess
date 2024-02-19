@@ -15,8 +15,7 @@ int main() {
     print_board(extraboard); 
 
     MoveNode *moves = makeMoveNode(-1, -1, -1, -1);
-    get_knight_moves(moves, extraboard, 3,6);
-    get_pawn_moves(moves,extraboard,1,4,WHITE);
+    get_king_moves(moves, extraboard, 0,4);
     printMoveNodes(moves);
     return 0;
 }
