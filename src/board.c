@@ -408,7 +408,56 @@ void get_queen_moves(MoveNode* head, char board[8][8], int row_from, int col_fro
     get_bishop_moves(head, board, row_from, col_from);
 }
 void get_king_moves(MoveNode* head, char board[8][8], int row_from, int col_from) {
-    
+    int row;
+    int col;
+    //check up
+    row = row_from + 1;
+    col = col_from;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check up then right
+    row = row_from + 1;
+    col = col_from + 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check right 
+    row = row_from;
+    col = col_from + 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check down then right
+    row = row_from - 1;
+    col = col_from + 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check down 
+    row = row_from - 1;
+    col = col_from;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check down then left
+    row = row_from - 1;
+    col = col_from - 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check left
+    row = row_from;
+    col = col_from - 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
+    //check up then left
+    row = row_from + 1;
+    col = col_from - 1;
+    if (in_bounds(row,col) && pieceColor(board[row][col]) != pieceColor(board[row_from][col_from])) {
+        addToEnd(head, makeMoveNode(row_from,col_from,row,col));
+    }
 }
 int in_bounds(int row, int col) {
     return (row < 8 && row >= 0 && col < 8 && col >=0);
